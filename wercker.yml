@@ -30,7 +30,7 @@ deploy:
         username: 
         password:
         tag: my-amazing-tag
-        repository: docker-registry-000-prod.avalonlabs.io
+        repository: 
         registry: $REGISTRY_URL
   aws-ecs:
   - script:
