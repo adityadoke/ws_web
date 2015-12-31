@@ -42,7 +42,7 @@ deploy:
       key: $AWS_ACCESS_KEY
       secret: $AWS_SECRET_KEY
       region: us-east-1
-      cluster-name: default
+      cluster-name: wercker-cluster
       service-name: wercker
       task-definition-name: wercker-counter
       task-definition-file: /app/wercker-app.json
