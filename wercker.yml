@@ -30,7 +30,7 @@ deploy:
         username: $USERNAME
         password: $PASSWORD
         tag: my-amazing-tag
-        repository: 202164733310.dkr.ecr.us-east-1.amazonaws.com/wercker
+        repository: wercker
         registry: $REGISTRY_URL
   aws-ecs:
   - script:
