@@ -29,9 +29,9 @@ deploy:
     - internal/docker-push:
         username: $USERNAME
         password: $PASSWORD
-        tag: latest
-        repository: shantanup/wercker
-        registry: https://registry.hub.docker.com
+        tag: latest001
+        repository: shantanu.panda/wercker
+        registry: https://202164733310.dkr.ecr.us-east-1.amazonaws.com
   aws-ecs:
   - script:
       name: copy
