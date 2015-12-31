@@ -25,15 +25,13 @@ build:
           cp wercker-app.json app.py requirements.txt $WERCKER_OUTPUT_DIR
 
 deploy:
-  box: python:2.7-slim
-  dockerhub:
-  - pip-install
-  - internal/docker-push:
-      username: $DOCKER_USER
-      password: $DOCKER_PASS
-      repository: wercker/frontend
-      cmd: "python /pipeline/source/app.py"
-      ports: 5001
+  steps:
+    - internal/docker-push:
+        username: $USERNAME
+        password: $PASSWORD
+        tag: my-amazing-tag
+        repository: wercker
+        registry: $REGISTRY_URL
   aws-ecs:
   - script:
       name: copy
