@@ -1,10 +1,7 @@
 [
     {
       "name": "frontend",
-      "links": [
-        "api"
-      ],
-      "image": "wercker/frontend",
+      "image": "shantanu/wercker",
       "essential": true,
       "portMappings": [
         {
@@ -14,21 +11,5 @@
       ],
       "memory": 500,
       "cpu": 10
-    },
-    {
-      "name": "api",
-      "image": "wercker/api",
-      "cpu": 10,
-      "memory": 500,
-      "essential": true,
-      "links": [ "redis" ],
-      "command": ["python", "/pipeline/source/app.py"]
-    },
-    {
-      "name": "redis",
-      "image": "redis",
-      "cpu": 10,
-      "memory": 500,
-      "essential": true
     }
 ]
