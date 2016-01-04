@@ -41,7 +41,6 @@ build:
             sed -i '/jetty-logging/d' etc/jetty.conf
             rm -fr demo-base javadoc
             rm jetty.tar.gz*
-
       -script: 
          name: Jetty Configuration
          code: |
