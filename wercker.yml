@@ -1,5 +1,5 @@
 box:
-    id:phusion/baseimage
+    id: phusion/baseimage
 no-response-timeout: 15
 
 build:
