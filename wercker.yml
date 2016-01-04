@@ -60,9 +60,6 @@ build:
            mkdir /etc/service/jetty
            cp -r start_jetty.sh /etc/service/jetty/run
            chmod a+x /etc/service/jetty/run
-      - script:
-          name: start jetty
-          code: service jetty start
 deploy:
   steps:
     - internal/docker-push:
