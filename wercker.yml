@@ -15,7 +15,7 @@ build:
             apt-get install telnet -y
             service nginx stop
             apt-get install python-pip -y
-            pip install aws-cli
+            pip install awscli
       - script:
           name: Oracal Java Installation
           code: |
