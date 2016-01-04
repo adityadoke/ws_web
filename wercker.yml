@@ -15,9 +15,9 @@ build:
             apt-get install telnet -y
             service nginx stop
             apt-get install python-pip -y
-            pip install aws-cli
+            pip install awscli
       - script:
-          name: Oracal Java Installation
+          name: Oracle Java Installation
           code: |
             apt-get install software-properties-common -y
             add-apt-repository ppa:webupd8team/java -y
