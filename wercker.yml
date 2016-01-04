@@ -61,13 +61,15 @@ build:
            cp -r start_jetty.sh /etc/service/jetty/run
            chmod a+x /etc/service/jetty/run
 deploy:
-  steps:
-    - internal/docker-push:
-        username: $USERNAME
-        password: $PASSWORD
-        tag: latest
-        repository: shantanup/wercker
-        registry: https://registry.hub.docker.com
+  box: python:2.7-slim
+  dockerhub:
+  - pip-ibnstall
+  - internal/docker-push:
+      username: $USERNAME
+      password: $PASSWORD
+      tag: latest
+      repository: shantanup/wercker
+      registry: https://registry.hub.docker.com
   aws-ecs:
   - tonnu/aws-ecs:
       key: $AWS_ACCESS_KEY
