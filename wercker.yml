@@ -1,11 +1,51 @@
-box: python:2.7
+box:
+    id:phusion/baseimage
 no-response-timeout: 15
-build:
-  steps:
-    - script:
-        name: Build Container
-        code: sudo docker build -t shantanup .
 
+build:
+    steps:
+      - script:
+          name: Install packages
+          code: |
+            apt-get update && apt-get upgrade -y
+            echo "install unzip"  
+            apt-get install unzip -y
+            echo "install nginx"
+            apt-get install nginx -y
+            apt-get install telnet -y
+            service nginx stop
+            apt-get install python-pip -y
+            pip install aws-cli
+      - script:
+          name: Oracal Java Installation
+          code: |
+            apt-get install software-properties-common -y
+            add-apt-repository ppa:webupd8team/java -y
+            apt-get update
+            echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
+            apt-get install oracle-java8-installer -y
+      - script:
+          name: Jetty Installation
+          cwd: /tmp
+          code: |
+            wget http://download.eclipse.org/jetty/stable-9/dist/jetty-distribution-9.1.1.v20140108.tar.gz
+            tar -xzvf jetty-distribution-9.1.1.v20140108.tar.gz
+            mv jetty-distribution-9.1.1.v20140108 /opt/jetty
+            cp /opt/jetty/modules/npn/npn-1.7.0_45.mod /opt/jetty/modules/npn/npn-1.7.0_51.mod
+            useradd jetty
+            chown -R jetty:jetty /opt/jetty
+            ln -s /opt/jetty/bin/jetty.sh /etc/init.d/jetty
+      - create-file:
+          name: generate jetty start script
+          filename: /etc/init.d/jetty
+          content: |-
+            JETTY_HOME=/opt/jetty
+            JETTY_USER=jetty
+            JETTY_PORT=8080
+            JETTY_LOGS=/opt/jetty/logs
+      - script:
+          name: start jetty
+          code: service jetty start
 deploy:
   steps:
     - internal/docker-push:
