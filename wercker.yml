@@ -63,7 +63,7 @@ build:
 deploy:
   box: python:2.7-slim
   dockerhub:
-  - pip-ibnstall
+  - pip-install
   - internal/docker-push:
       username: $USERNAME
       password: $PASSWORD
@@ -71,6 +71,9 @@ deploy:
       repository: shantanup/wercker
       registry: https://registry.hub.docker.com
   aws-ecs:
+  - script:
+      name: copy
+      code: mkdir /app && cp wercker-app.json /app/
   - tonnu/aws-ecs:
       key: $AWS_ACCESS_KEY
       secret: $AWS_SECRET_KEY
@@ -78,4 +81,5 @@ deploy:
       cluster-name: wrecker-cluster
       service-name: wercker
       task-definition-name: wercker-task
+      task-definition-file: /app/wercker-app.json
       minimum-running-tasks: 1
