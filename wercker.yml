@@ -14,7 +14,7 @@ build:
             apt-get install nginx -y
             apt-get install telnet -y
             service nginx stop
-            apt-get install python2.7
+            apt-get install python2.7 -y
             apt-get install python-pip -y
             pip install awscli
       - script:
