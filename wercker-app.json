@@ -1,7 +1,7 @@
 [
     {
       "name": "frontend",
-      "image": "shantanu/wercker",
+      "image": "shantanup/wercker",
       "essential": true,
       "portMappings": [
         {
