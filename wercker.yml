@@ -62,6 +62,8 @@ build:
            cp -r start_jetty.sh /etc/service/jetty/run
            chmod a+x /etc/service/jetty/run
 deploy:
+  box: python:2.7-slim
+  dockerhub: 
   steps:
     - internal/docker-push:
         username: $USERNAME
