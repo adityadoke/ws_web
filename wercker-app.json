@@ -10,6 +10,7 @@
         }
       ],
       "memory": 500,
-      "cpu": 1
+      "cpu": 1,
+      "command" : ["/sbin/my_init"]
     }
 ]
