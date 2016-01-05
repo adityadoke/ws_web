@@ -1,6 +1,6 @@
 [
     {
-      "name": "frontend",
+      "name": "jetty",
       "image": "shantanup/wercker",
       "essential": true,
       "portMappings": [
@@ -10,6 +10,6 @@
         }
       ],
       "memory": 500,
-      "cpu": 1
+      "cpu": 10
     }
 ]
