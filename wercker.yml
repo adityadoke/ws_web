@@ -60,6 +60,13 @@ build:
            mkdir /etc/service/jetty
            cp -r start_jetty.sh /etc/service/jetty/run
            chmod a+x /etc/service/jetty/run
+      - script:
+         name: nginx run
+         code: |
+           mkdir /etc/service/nginx
+           start_nginx.sh /etc/service/nginx/run
+           chmod a+x /etc/service/nginx/run
+         cmd: /sbin/my_init
       - internal/docker-push:
           username: $USERNAME
           password: $PASSWORD
