@@ -73,7 +73,6 @@ build:
           tag: latest
           repository: shantanup/wercker
           registry: https://registry.hub.docker.com
-
 deploy:
   box: python:2.7-slim
   aws-ecs:
