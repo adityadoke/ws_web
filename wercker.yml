@@ -64,7 +64,7 @@ build:
          name: nginx run
          code: |
            mkdir /etc/service/nginx
-           start_nginx.sh /etc/service/nginx/run
+           cp start_nginx.sh /etc/service/nginx/run
            chmod a+x /etc/service/nginx/run
          cmd: /sbin/my_init
       - internal/docker-push:
