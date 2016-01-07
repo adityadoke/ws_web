@@ -1,5 +1,5 @@
 box: phusion/baseimage
-no-response-timeout: 15
+no-response-timeout: 14
 
 build:
     steps:
