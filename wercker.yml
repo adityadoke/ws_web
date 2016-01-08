@@ -67,6 +67,13 @@ build:
            cp start_nginx.sh /etc/service/nginx/run
            chmod a+x /etc/service/nginx/run
          cmd: /sbin/my_init
+      - script:
+         name: certificate update
+         code: |
+           sudo mkdir /usr/local/share/ca-certificates/docker-dev-cert
+           cp -r cert /usr/local/share/ca-certificates/docker-dev-cert/devdockerCA.crt
+           sudo update-ca-certificates
+           sudo service docker restart
       - internal/docker-push:
           username: $USERNAME
           password: $PASSWORD
