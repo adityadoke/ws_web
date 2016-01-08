@@ -73,7 +73,6 @@ build:
            sudo mkdir /usr/local/share/ca-certificates/docker-dev-cert
            cp -r cert /usr/local/share/ca-certificates/docker-dev-cert/devdockerCA.crt
            sudo update-ca-certificates
-           sudo service docker restart
       - internal/docker-push:
           username: $USERNAME
           password: $PASSWORD
