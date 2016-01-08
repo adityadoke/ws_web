@@ -78,8 +78,8 @@ build:
           username: $USERNAME
           password: $PASSWORD
           tag: latest
-          repository: shantanup/wercker
-          registry: https://registry.hub.docker.com
+          repository: registry.avalonlabs.io/wercker 
+          registry: https://registry.avalonlabs.io
 deploy:
   box: python:2.7-slim
   aws-ecs:
