@@ -78,7 +78,7 @@ build:
           password: $PASSWORD
           tag: latest
           repository: registry.avalonlabs.io/wercker 
-          registry: https://registry.avalonlabs.io
+          registry: https://registry.avalonlabs.io/v2
 deploy:
   box: python:2.7-slim
   aws-ecs:
