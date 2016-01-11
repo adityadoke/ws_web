@@ -74,7 +74,7 @@ build:
          code: |
            VERSION=$WAR_FILE_VERSION 
            chown jetty:jetty /var/lib/jetty/webapps/accounts-${VERSION}.war
-           chmod 777 /var/lib/jetty/webapps/accountsounts-${VERSION}.war
+           chmod 777 /var/lib/jetty/webapps/accounts-${VERSION}.war
            mkdir /var/avalon
            chmod 777 /var/avalon
       - script:
