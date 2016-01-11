@@ -1,5 +1,5 @@
 box: phusion/baseimage
-no-response-timeout: 14
+no-response-timeout: 15
 
 build:
     steps:
@@ -64,7 +64,7 @@ build:
          name: Deploy war file
          code: |
            mkdir -p /var/lib/jetty/webapps
-           VERSION=0.4.172
+           VERSION=$WAR_FILE_VERSION
            export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY
            export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_KEY
            export AWS_DEFAULT_REGION=$AWS_REGION
@@ -72,6 +72,7 @@ build:
       - script:
          name: Jetty user permissions
          code: |
+           VERSION=$WAR_FILE_VERSION 
            chown jetty:jetty /var/lib/jetty/webapps/accounts-${VERSION}.war
            chmod 777 /var/lib/jetty/webapps/accountsounts-${VERSION}.war
            mkdir /var/avalon
