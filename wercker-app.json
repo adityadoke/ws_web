@@ -1,6 +1,6 @@
 [
     {
-      "name": "jetty",
+      "name": "twiin-app-dev-wercker",
       "image": "docker-registry-001-prod.avalonlabs.io/twiin-app-dev-accounts-v-000",
       "essential": true,
       "portMappings": [
