@@ -6,7 +6,7 @@ RUN apt-get install nginx -y
 RUN apt-get install telnet -y
 RUN service nginx stop
 RUN apt-get install python-pip -y
-RUN pip install s3cmd
+RUN pip install awscli
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -72,6 +72,20 @@ ADD start_jetty.sh /etc/service/jetty/run
 RUN chmod a+x /etc/service/jetty/run
 
 WORKDIR $JETTY_BASE/webapps
+
+
+ENV VERSION=0.4.172
+
+RUN aws s3 cp s3://packager-000-dev.avalonlabs.io/com/twiinlabs/accounts/${VERSION}/accounts-${VERSION}.war /var/lib/jetty/webapps
+
+RUN chown jetty:jetty $JETTY_BASE/webapps/accounts-${VERSION}.war
+RUN chmod 777 $JETTY_BASE/webapps/accountsounts-${VERSION}.war
+RUN mkdir /var/avalon
+RUN chmod 777 /var/avalon
+
+ADD swagger /etc/nginx/sites-available/
+RUN cd /etc/nginx/sites-enabled/ && ln -s ../sites-available/swagger
+RUN rm -f /etc/nginx/sites-enabled/default
 
 RUN mkdir /etc/service/nginx
 ADD start_nginx.sh /etc/service/nginx/run
