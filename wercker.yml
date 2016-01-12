@@ -80,7 +80,6 @@ build:
       - script:
          name: Swagger
          code: |
-           mkdir /etc/nginx/sites-available/
            cd /etc/nginx/sites-enabled/ && ln -s ../sites-available/swagger
            rm -f /etc/nginx/sites-enabled/default
       - script:
