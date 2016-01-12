@@ -76,6 +76,9 @@ WORKDIR $JETTY_BASE/webapps
 
 ENV VERSION=0.4.172
 
+RUN export AWS_ACCESS_KEY_ID=$AWS_KEY
+RUN export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_KEY
+RUN export AWS_DEFAULT_REGION=$AWS_REGION
 RUN aws s3 cp s3://packager-000-dev.avalonlabs.io/com/twiinlabs/accounts/${VERSION}/accounts-${VERSION}.war /var/lib/jetty/webapps
 
 RUN chown jetty:jetty $JETTY_BASE/webapps/accounts-${VERSION}.war
