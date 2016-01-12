@@ -78,6 +78,12 @@ build:
            mkdir /var/avalon
            chmod 777 /var/avalon
       - script:
+         name: Swagger
+         code: |
+           mkdir /etc/nginx/sites-available/
+           cd /etc/nginx/sites-enabled/ && ln -s ../sites-available/swagger
+           rm -f /etc/nginx/sites-enabled/default
+      - script:
          name: nginx run
          code: |
            mkdir /etc/service/nginx
@@ -91,7 +97,7 @@ build:
           username: $USERNAME
           password: $PASSWORD
           tag: latest
-          repository: registry.avalonlabs.io/wercker 
+          repository: registry.avalonlabs.io/twiin-app-dev-accounts-v-000
           registry: https://registry.avalonlabs.io
 deploy:
   box: python:2.7-slim
@@ -104,8 +110,8 @@ deploy:
       key: $AWS_ACCESS_KEY
       secret: $AWS_SECRET_KEY
       region: us-east-1
-      cluster-name: wrecker-cluster
-      service-name: wercker
-      task-definition-name: wercker-task
+      cluster-name: default
+      service-name: twiin-accounts
+      task-definition-name: twiin-accounts
       task-definition-file: /app/wercker-app.json
       minimum-running-tasks: 1
