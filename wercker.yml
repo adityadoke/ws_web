@@ -1,6 +1,6 @@
 box: phusion/baseimage
-no-response-timeout: 500
-
+no-response-timeout: 15
+command-timeout: 30
 build:
     steps:
       - script:
