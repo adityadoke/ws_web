@@ -1,0 +1,117 @@
+box: phusion/baseimage
+no-response-timeout: 15
+command-timeout: 30
+build:
+    steps:
+      - script:
+          name: Install packages
+          code: |
+            apt-get update && apt-get upgrade -y
+            echo "install unzip"  
+            apt-get install unzip -y
+            echo "install nginx"
+            apt-get install nginx -y
+            apt-get install telnet -y
+            service nginx stop
+            apt-get install python2.7 -y
+            apt-get install python-pip -y
+            pip install awscli
+      - script:
+          name: Oracal Java Installation
+          code: |
+            apt-get install software-properties-common -y
+            add-apt-repository ppa:webupd8team/java -y
+            apt-get update
+            echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
+            apt-get install oracle-java8-installer -y
+      - script:
+          name: Jetty Installation
+          code: |
+            groupadd -r jetty && useradd -r -g jetty jetty
+            JETTY_HOME=/usr/local/jetty
+            PATH=$JETTY_HOME/bin:$PATH
+            mkdir -p "$JETTY_HOME"
+            cd /usr/local/jetty
+            gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B59B67FD7904984367F931800818D9D68FB67BAC
+            gpg --keyserver ha.pool.sks-keyservers.net --recv-keys 5DE533CB43DAF8BC3E372283E7AE839CD7C58886
+            curl -SL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.3.2.v20150730/jetty-distribution-9.3.2.v20150730.tar.gz -o jetty.tar.gz
+            curl -SL https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.3.2.v20150730/jetty-distribution-9.3.2.v20150730.tar.gz.asc -o jetty.tar.gz.asc
+            gpg --verify jetty.tar.gz.asc
+            tar -xvf jetty.tar.gz --strip-components=1
+            sed -i '/jetty-logging/d' etc/jetty.conf
+            rm -fr demo-base javadoc
+            rm jetty.tar.gz*
+      - script: 
+         name: Jetty Configuration
+         code: |
+           JETTY_BASE=/var/lib/jetty
+           mkdir -p "$JETTY_BASE"
+           cd /var/lib/jetty
+           modules="$(grep -- ^--module= "$JETTY_HOME/start.ini" | cut -d= -f2 | paste -d, -s)"
+           java -jar "$JETTY_HOME/start.jar" --add-to-startd="$modules,setuid"
+      - script:
+         name: Jetty RUN
+         code: |
+           JETTY_RUN=/run/jetty
+           JETTY_STATE=$JETTY_RUN/jetty.state
+           TMPDIR=/tmp/jetty
+           mkdir -p "$JETTY_RUN" "$TMPDIR"
+           chown -R jetty:jetty "$JETTY_RUN" "$TMPDIR" "$JETTY_BASE"
+           mkdir /etc/service/jetty
+           cp -r start_jetty.sh /etc/service/jetty/run
+           chmod a+x /etc/service/jetty/run
+      - script:
+         name: Deploy war file
+         code: |
+           mkdir -p /var/lib/jetty/webapps
+           VERSION=$WAR_FILE_VERSION
+           export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY
+           export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_KEY
+           export AWS_DEFAULT_REGION=$AWS_REGION
+           aws s3 cp s3://packager-000-dev.avalonlabs.io/com/twiinlabs/accounts/${VERSION}/accounts-${VERSION}.war /var/lib/jetty/webapps
+      - script:
+         name: Jetty user permissions
+         code: |
+           VERSION=$WAR_FILE_VERSION 
+           chown jetty:jetty /var/lib/jetty/webapps/accounts-${VERSION}.war
+           chmod 777 /var/lib/jetty/webapps/accounts-${VERSION}.war
+           mkdir /var/avalon
+           chmod 777 /var/avalon
+      - script:
+         name: Swagger
+         code: |
+           cp -r swagger /etc/nginx/sites-available/swagger
+           cd /etc/nginx/sites-enabled/ && ln -s ../sites-available/swagger
+           rm -f /etc/nginx/sites-enabled/default
+      - script:
+         name: nginx run
+         code: |
+           mkdir /etc/service/nginx
+           cp start_nginx.sh /etc/service/nginx/run
+           chmod a+x /etc/service/nginx/run
+         cmd: /sbin/my_init
+      - script:
+         name: apt cleanup
+         code : apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+      - internal/docker-push:
+          username: $USERNAME
+          password: $PASSWORD
+          tag: latest
+          repository: registry.avalonlabs.io/twiin-app-dev-accounts-v-000
+          registry: https://registry.avalonlabs.io
+deploy:
+  box: python:2.7-slim
+  aws-ecs:
+  - pip-install
+  - script:
+      name: copy
+      code: mkdir /app && cp wercker-app.json /app/
+  - tonnu/aws-ecs:
+      key: $AWS_ACCESS_KEY
+      secret: $AWS_SECRET_KEY
+      region: us-east-1
+      cluster-name: default
+      service-name: twiin-accounts
+      task-definition-name: twiin-accounts
+      task-definition-file: /app/wercker-app.json
+      minimum-running-tasks: 1
