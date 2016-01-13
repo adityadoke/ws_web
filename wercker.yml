@@ -80,6 +80,7 @@ build:
       - script:
          name: Swagger
          code: |
+           cp -r swagger /etc/nginx/sites-available/swagger
            cd /etc/nginx/sites-enabled/ && ln -s ../sites-available/swagger
            rm -f /etc/nginx/sites-enabled/default
       - script:

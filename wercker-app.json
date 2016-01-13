@@ -9,16 +9,6 @@
           "hostPort": 9000
         }
       ],
-      "environment": [
-        {
-          "name": "ECS_ENGINE_AUTH_TYPE",
-          "value": "docker"
-        },
-        {
-          "name": "ECS_ENGINE_AUTH_DATA",
-          "value": "{\"https://registry.avalonlabs.io\":{\"username\":\"twiin\",\"password\":\"twiin123\",\"email\":\"shantanu1804@gmail.com\"}}"
-        }
-      ],
       "memory": 1024,
       "cpu": 1,
       "command" : ["/sbin/my_init"]
