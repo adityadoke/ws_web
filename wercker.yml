@@ -60,6 +60,7 @@ build:
            mkdir /etc/service/jetty
            CONF=$CONF_FILE
            sed -i "s/CONF_FILE/$CONF/g" start_jetty.sh
+           cat start_jetty.sh
            cp -r start_jetty.sh /etc/service/jetty/run
            chmod a+x /etc/service/jetty/run
       - script:
