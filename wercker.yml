@@ -99,6 +99,16 @@ build:
            chmod a+x /etc/service/nginx/run
          cmd: /sbin/my_init
       - script:
+         name: wercker-app.json change
+         code: |
+           CONTAINER_NAME=$CONTAINER_NAME
+           REPOSITORY_NAME=$REPOSITORY_NAME
+           PORT_NO=$PORT_NO
+           sed -i "s/CONTAINER_NAME/$CONTAINER_NAME/g" wercker-app.json
+           sed -i "s/IMAGE_NAME/$REPOSITORY_NAME/g" wercker-app.json
+           sed -i "s/PORT_NO/$PORT_NO/g" wercker-app.json
+           cat wercker-app.json
+      - script:
          name: apt cleanup
          code : apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
       - internal/docker-push:
@@ -113,15 +123,7 @@ deploy:
   - pip-install
   - script:
       name: copy
-      code: |
-        CONTAINER_NAME=$CONTAINER_NAME
-        REPOSITORY_NAME=$REPOSITORY_NAME
-        PORT_NO=$PORT_NO
-        sed -i "s/CONTAINER_NAME/$CONTAINER_NAME/g" wercker-app.json
-        sed -i "s/IMAGE_NAME/$REPOSITORY_NAME/g" wercker-app.json
-        sed -i "s/PORT_NO/$PORT_NO/g" wercker-app.json
-        cat wercker-app.json
-        mkdir /app && cp wercker-app.json /app/
+      code: mkdir /app && cp wercker-app.json /app/
   - tonnu/aws-ecs:
       key: $AWS_ACCESS_KEY
       secret: $AWS_SECRET_KEY
