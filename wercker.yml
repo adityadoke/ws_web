@@ -87,6 +87,7 @@ build:
            APP=$APP_VERSION
            sed -i "s/APP_VERSION/$APP/g" swagger
            sed -i "s/PORT_NO/$PORT/g" swagger
+           cat swagger
            cp -r swagger /etc/nginx/sites-available/swagger
            cd /etc/nginx/sites-enabled/ && ln -s ../sites-available/swagger
            rm -f /etc/nginx/sites-enabled/default
@@ -112,7 +113,12 @@ deploy:
   - pip-install
   - script:
       name: copy
-      code: mkdir /app && cp wercker-app.json /app/
+      code: |
+        sed -i "s/CONTAINER_NAME/$CONTAINER_NAME/g" wercker-app.json
+        sed -i "s/IMAGE_NAME/$REPOSITORY_NAME/g" wercker-app.json
+        sed -i "s/PORT_NO/$PORT_NO/g" wercker-app.json
+        cat wercker-app.json
+        mkdir /app && cp wercker-app.json /app/
   - tonnu/aws-ecs:
       key: $AWS_ACCESS_KEY
       secret: $AWS_SECRET_KEY
