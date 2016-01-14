@@ -83,7 +83,7 @@ build:
       - script:
          name: Swagger
          code: |
-           Port=$PORT_NO       
+           PORT=$PORT_NO       
            APP=$APP_VERSION
            sed -i "s/APP_VERSION/$APP/g" swagger
            sed -i "s/PORT_NO/$PORT/g" swagger
