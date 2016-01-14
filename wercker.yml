@@ -104,7 +104,7 @@ build:
           username: $USERNAME
           password: $PASSWORD
           tag: latest
-          repository: registry.avalonlabs.io/twiin-app-dev-accounts-v-000
+          repository: $REPOSITORY_NAME
           registry: https://registry.avalonlabs.io
 deploy:
   box: python:2.7-slim
@@ -116,9 +116,9 @@ deploy:
   - tonnu/aws-ecs:
       key: $AWS_ACCESS_KEY
       secret: $AWS_SECRET_KEY
-      region: us-east-1
-      cluster-name: default
-      service-name: twiin-accounts
-      task-definition-name: twiin-accounts
+      region: $AWS_REGION
+      cluster-name: $CLUSTER_NAME
+      service-name: $SERVICE_NAME
+      task-definition-name: $TASK_DEFINATION
       task-definition-file: /app/wercker-app.json
       minimum-running-tasks: 1
