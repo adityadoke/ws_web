@@ -17,6 +17,14 @@ build:
             apt-get install python-pip -y
             pip install awscli
       - script:
+         name: wercker-app.json change
+         code: |
+           CONTAINER_NAME=$CONTAINER_NAME
+           REPOSITORY_NAME=$REPOSITORY_NAME
+           PORT_NO=$PORT_NO
+           sed -i "s/PORT_NO/$PORT_NO/g" wercker-app.json
+           cat wercker-app.json
+      - script:
           name: Oracal Java Installation
           code: |
             apt-get install software-properties-common -y
@@ -98,14 +106,6 @@ build:
            cp start_nginx.sh /etc/service/nginx/run
            chmod a+x /etc/service/nginx/run
          cmd: /sbin/my_init
-      - script:
-         name: wercker-app.json change
-         code: |
-           CONTAINER_NAME=$CONTAINER_NAME
-           REPOSITORY_NAME=$REPOSITORY_NAME
-           PORT_NO=$PORT_NO
-           sed -i "s/PORT_NO/$PORT_NO/g" wercker-app.json
-           cat wercker-app.json
       - script:
          name: apt cleanup
          code : apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
