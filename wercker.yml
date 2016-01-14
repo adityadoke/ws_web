@@ -20,9 +20,9 @@ build:
          name: wercker-app.json change
          code: |
            CONTAINER_NAME=$CONTAINER_NAME
-           REPOSITORY=$REPOSITORY_NAME
+           IMAGE_NAME=$REPOSITORY_NAME
            PORT_NO=$PORT_NO
-           sed -i "s/IMAGE_NAME/$REPOSITORY/g" wercker-app.json
+           sed -i "s/CONTAINER_NAME/$CONTAINER_NAME/g" wercker-app.json
            sed -i "s/PORT_NO/$PORT_NO/g" wercker-app.json
            cat wercker-app.json
       - script:
