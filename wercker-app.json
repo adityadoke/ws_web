@@ -1,12 +1,12 @@
 [
     {
-      "name": "twiin-app-dev-wercker",
-      "image": "registry.avalonlabs.io/twiin-app-dev-accounts-v-000",
+      "name": "CONTAINER_NAME",
+      "image": "IMAGE_NAME",
       "essential": true,
       "portMappings": [
         {
           "containerPort": 80,
-          "hostPort": 9000
+          "hostPort": PORT_NO
         }
       ],
       "memory": 1024,
