@@ -3,6 +3,7 @@ box:
   username: $USERNAME
   password: $PASSWORD
   tag: latest
+  registry: https://registry.avalonlabs.io
 no-response-timeout: 15
 command-timeout: 30
 build:
