@@ -1,0 +1,69 @@
+box: 
+  id: registry.avalonlabs.io/twiinbaseimage
+  username: $USERNAME
+  password: $PASSWORD
+  tag: latest
+no-response-timeout: 15
+command-timeout: 30
+build:
+    steps:
+      - script:
+         name: wercker-app.json change
+         code: |
+           CONTAINER_NAME=$CONTAINER_NAME
+           IMAGE_NAME=$REPOSITORY_NAME
+           PORT_NO=$PORT_NO
+           sed -i "s#IMAGE_NAME#$IMAGE_NAME#g" wercker-app.json
+           sed -i "s/CONTAINER_NAME/$CONTAINER_NAME/g" wercker-app.json
+           sed -i "s/PORT_NO/$PORT_NO/g" wercker-app.json
+           cat wercker-app.json
+      - script:
+         name: Deploy war file
+         code: |
+           mkdir -p /var/lib/jetty/webapps
+           VERSION=$WAR_FILE_VERSION
+           export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY
+           export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_KEY
+           export AWS_DEFAULT_REGION=$AWS_REGION
+           aws s3 cp s3://packager-000-dev.avalonlabs.io/com/twiinlabs/accounts/${VERSION}/accounts-${VERSION}.war /var/lib/jetty/webapps
+      - script:
+         name: Swagger
+         code: |
+           PORT=$PORT_NO       
+           APP=$APP_VERSION
+           sed -i "s/APP_VERSION/$APP/g" swagger
+           sed -i "s/PORT_NO/$PORT/g" swagger
+           cat swagger
+           cp -r swagger /etc/nginx/sites-available/swagger
+           cd /etc/nginx/sites-enabled/ && ln -s ../sites-available/swagger
+           rm -f /etc/nginx/sites-enabled/default
+      - script:
+         name: nginx run
+         code: |
+           chmod a+x /etc/service/nginx/run
+         cmd: /sbin/my_init
+      - script:
+         name: apt cleanup
+         code : apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+      - internal/docker-push:
+          username: $USERNAME
+          password: $PASSWORD
+          tag: latest
+          repository: $REPOSITORY_NAME
+          registry: https://registry.avalonlabs.io
+deploy:
+  box: python:2.7-slim
+  aws-ecs:
+  - pip-install
+  - script:
+      name: copy
+      code: mkdir /app && cp wercker-app.json /app/
+  - tonnu/aws-ecs:
+      key: $AWS_ACCESS_KEY
+      secret: $AWS_SECRET_KEY
+      region: $AWS_REGION
+      cluster-name: $CLUSTER_NAME
+      service-name: $SERVICE_NAME
+      task-definition-name: $TASK_DEFINATION
+      task-definition-file: /app/wercker-app.json
+      minimum-running-tasks: 1
