@@ -9,6 +9,11 @@ command-timeout: 30
 build:
     steps:
       - script:
+         name: Install packages
+         code: |
+           apt-get update && apt-get upgrade -y
+           pip install awscli
+      - script:
          name: wercker-app.json change
          code: |
            CONTAINER_NAME=$CONTAINER_NAME
@@ -21,12 +26,11 @@ build:
       - script:
          name: Deploy war file
          code: |
-           mkdir -p /var/lib/jetty/webapps
            VERSION=$WAR_FILE_VERSION
            export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY
            export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_KEY
            export AWS_DEFAULT_REGION=$AWS_REGION
-           aws s3 cp s3://packager-000-dev.avalonlabs.io/com/twiinlabs/accounts/${VERSION}/accounts-${VERSION}.war /var/lib/jetty/webapps
+           aws s3 cp s3://packager-000-dev.avalonlabs.io/com/twiinlabs/accounts/${VERSION}/accounts-${VERSION}.war /opt/tomcat/webapps/
       - script:
          name: Swagger
          code: |
