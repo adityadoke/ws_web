@@ -1,4 +1,4 @@
-# ws_web 
+# ws_web  
 Application part of a demo for deploying containers to Amazon EC2 Container
 Services (ECS)
 
